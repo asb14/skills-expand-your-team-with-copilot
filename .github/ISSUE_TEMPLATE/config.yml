@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 📚 Development Guide
+    url: https://github.com/asb14/skills-expand-your-team-with-copilot/blob/main/docs/how-to-develop.md
+    about: Learn how to set up and develop the system locally
+  - name: 🎯 Quick Start Guide
+    url: https://github.com/asb14/skills-expand-your-team-with-copilot/blob/main/README.md
+    about: Overview and getting started information

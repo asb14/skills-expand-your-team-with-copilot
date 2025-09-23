@@ -1,0 +1,138 @@
+name: Technical Support
+description: Get help with using the system or understanding how something works
+title: "[SUPPORT] "
+labels: ["question", "support"]
+assignees:
+  - Copilot
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Technical Support Request
+        
+        Use this form when you need help using the Mergington High School Management System or want to understand how something works.
+        
+        **Please provide clear details** - this helps our Copilot coding agent give you the best assistance.
+
+  - type: dropdown
+    id: support-category
+    attributes:
+      label: What kind of help do you need?
+      description: Select the category that best matches your question
+      options:
+        - How to use a feature
+        - Login or authentication problems
+        - Understanding system capabilities
+        - Best practices for managing activities
+        - Training or documentation request
+        - Account setup or permissions
+        - General system questions
+        - Other (describe below)
+    validations:
+      required: true
+
+  - type: textarea
+    id: question-description
+    attributes:
+      label: What do you need help with?
+      description: Describe your question or what you're trying to accomplish
+      placeholder: "e.g., How do I change the meeting time for an existing activity? I can't figure out how to unregister a student who graduated..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: what-tried
+    attributes:
+      label: What have you already tried?
+      description: Tell us what steps you've taken so far
+      placeholder: "e.g., I looked for an 'Edit' button but couldn't find one, I tried clicking on the activity name..."
+    validations:
+      required: false
+
+  - type: dropdown
+    id: urgency
+    attributes:
+      label: How urgent is this?
+      options:
+        - Very urgent - Blocking important work
+        - Moderately urgent - Needed this week
+        - Not urgent - When convenient
+        - Just curious - No deadline
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: Any other information that might help us assist you
+      placeholder: "e.g., I'm new to the system, This is for the upcoming semester planning, Multiple teachers have the same question..."
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: preferred-help-format
+    attributes:
+      label: How would you like to receive help?
+      description: Select all that apply
+      options:
+        - label: Step-by-step instructions
+        - label: Screenshots or visual guides
+        - label: Video tutorial
+        - label: Documentation update
+        - label: System improvement to make it easier
+        - label: Direct assistance with the task
+
+  - type: checkboxes
+    id: acceptance-criteria
+    attributes:
+      label: Success Criteria
+      description: This support request will be considered resolved when
+      options:
+        - label: I understand how to accomplish what I need
+          required: true
+        - label: I can successfully complete the task myself
+          required: true
+        - label: Clear documentation or instructions are provided
+          required: true
+        - label: Any system issues preventing the task are fixed
+          required: true
+
+  - type: markdown
+    attributes:
+      value: |
+        ## Implementation Notes for Copilot Agent
+        
+        **Support Response Guidelines:**
+        - Provide clear, step-by-step instructions in simple language
+        - Avoid technical jargon - remember teachers are not technical users
+        - Include screenshots or examples when helpful
+        - If the request reveals a usability issue, consider suggesting system improvements
+        - Always test your instructions before providing them
+        
+        **Common Support Topics:**
+        
+        **User Management:**
+        - Teacher login credentials: Check `src/backend/database.py` for initial_teachers
+        - Default passwords: art123 (mrodriguez), chess456 (mchen), admin789 (principal)
+        
+        **Activity Management:**
+        - Activities are defined in `src/backend/database.py`
+        - Teachers can register/unregister students through the web interface
+        - To modify activities, use the "Modify Existing Activity" issue template
+        
+        **System Access:**
+        - Website runs at `http://localhost:8000` (development)
+        - Teachers need to log in to register students
+        - Students can view activities without logging in
+        
+        **If System Changes Are Needed:**
+        - For bugs: Direct user to "Bug Report" template
+        - For new features: Direct user to "Feature Request" template
+        - For activity changes: Direct user to "Add New Activity" or "Modify Activity" templates
+        
+        **Response Format:**
+        - Start with a clear answer to their question
+        - Provide step-by-step instructions
+        - Include any relevant context or tips
+        - Suggest related resources or templates if applicable

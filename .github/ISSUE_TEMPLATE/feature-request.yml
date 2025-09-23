@@ -1,0 +1,160 @@
+name: Feature Request
+description: Request a new feature or enhancement to the system
+title: "[FEATURE] "
+labels: ["enhancement", "feature-request"]
+assignees:
+  - Copilot
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Feature Request
+        
+        Use this form to request new features or enhancements to the Mergington High School Management System.
+        
+        **Please provide clear details** - this helps our Copilot coding agent understand exactly what you need and implement it correctly.
+
+  - type: textarea
+    id: feature-description
+    attributes:
+      label: Feature Description
+      description: What new feature would you like to see?
+      placeholder: "e.g., Add a calendar view to see all activities by date, Send email notifications when students register..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem-solving
+    attributes:
+      label: What problem does this solve?
+      description: Explain why this feature is needed and what problem it addresses
+      placeholder: "e.g., Teachers need a quick way to see which activities conflict with each other, Parents want to know when their child registers for activities..."
+    validations:
+      required: true
+
+  - type: dropdown
+    id: feature-area
+    attributes:
+      label: Which area of the system should this affect?
+      description: Where should this new feature be added?
+      options:
+        - Activity management (add/edit activities)
+        - Student registration process
+        - Teacher dashboard/interface
+        - Activity display and filtering
+        - Notifications and communication
+        - Reports and data export
+        - User authentication and permissions
+        - Mobile/responsive design
+        - Other (describe below)
+    validations:
+      required: true
+
+  - type: dropdown
+    id: user-type
+    attributes:
+      label: Who would use this feature?
+      options:
+        - Teachers only
+        - Students only
+        - Both teachers and students
+        - Parents/guardians
+        - School administrators
+        - Everyone
+    validations:
+      required: true
+
+  - type: textarea
+    id: detailed-requirements
+    attributes:
+      label: Detailed Requirements
+      description: Describe exactly how this feature should work
+      placeholder: |
+        e.g., For calendar view:
+        - Show a monthly calendar layout
+        - Display activities as colored blocks on their meeting days
+        - Click on activity to see details
+        - Filter by activity type or teacher
+        - Print-friendly version
+    validations:
+      required: true
+
+  - type: textarea
+    id: user-interface
+    attributes:
+      label: User Interface Ideas
+      description: How should users interact with this feature? Where should it appear?
+      placeholder: "e.g., Add a 'Calendar View' tab next to the current activity list, Add a notification bell icon in the top navigation..."
+    validations:
+      required: false
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: How important is this feature?
+      options:
+        - Critical - Needed immediately for school operations
+        - High - Would significantly improve our workflow
+        - Medium - Nice to have, would be helpful
+        - Low - Would be convenient but not urgent
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Current Workarounds
+      description: How do you currently handle this need, if at all?
+      placeholder: "e.g., Currently I write activities on a paper calendar, I send individual emails to notify parents..."
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: acceptance-criteria
+    attributes:
+      label: Acceptance Criteria
+      description: This feature will be considered complete when
+      options:
+        - label: The feature works as described in the requirements
+          required: true
+        - label: The feature is accessible to the intended users
+          required: true
+        - label: The feature integrates smoothly with existing functionality
+          required: true
+        - label: The feature is easy to use and understand
+          required: true
+        - label: The feature is tested and working reliably
+          required: true
+
+  - type: markdown
+    attributes:
+      value: |
+        ## Implementation Notes for Copilot Agent
+        
+        **Technical Context:**
+        - Frontend: HTML/CSS/JavaScript in `src/static/` directory
+        - Backend: FastAPI in `src/backend/` directory
+        - Database: In-memory collections (`src/backend/database.py`)
+        - Main app: `src/app.py`
+        - Activities API: `src/backend/routers/activities.py`
+        - Authentication: `src/backend/routers/auth.py`
+        
+        **Architecture Guidelines:**
+        - Keep the system simple - this is for teachers, not technical users
+        - Use only HTML, CSS, JavaScript, and Python (no additional languages)
+        - No command line tools or separate apps
+        - Maintain easy-to-understand directory structure
+        - Ensure good user experience for non-technical users
+        
+        **Implementation Approach:**
+        1. Start with minimal viable version of the feature
+        2. Add backend API endpoints if needed (`src/backend/routers/`)
+        3. Update frontend interface (`src/static/`)
+        4. Ensure mobile-friendly responsive design
+        5. Test thoroughly with realistic data
+        
+        **Testing:**
+        - Test feature with multiple user types (teachers, students)
+        - Verify mobile/tablet compatibility
+        - Test with realistic school data and scenarios
+        - Ensure feature works with existing activities and users
