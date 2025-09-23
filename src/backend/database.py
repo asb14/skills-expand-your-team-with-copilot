@@ -1,15 +1,100 @@
 """
-MongoDB database configuration and setup for Mergington High School API
+In-memory database configuration for Mergington High School API
 """
 
-from pymongo import MongoClient
 from argon2 import PasswordHasher
 
-# Connect to MongoDB
-client = MongoClient('mongodb://localhost:27017/')
-db = client['mergington_high']
-activities_collection = db['activities']
-teachers_collection = db['teachers']
+# In-memory storage (for development/demo purposes)
+_activities_data = {}
+_teachers_data = {}
+
+class InMemoryCollection:
+    def __init__(self, data_store):
+        self.data_store = data_store
+    
+    def find(self, query=None):
+        if query is None:
+            for key, value in self.data_store.items():
+                yield {"_id": key, **value}
+        else:
+            # Simple query support for our use case
+            for key, value in self.data_store.items():
+                if self._matches_query({"_id": key, **value}, query):
+                    yield {"_id": key, **value}
+    
+    def find_one(self, query):
+        for doc in self.find(query):
+            return doc
+        return None
+    
+    def count_documents(self, query):
+        return len(list(self.find(query)))
+    
+    def insert_one(self, doc):
+        doc_id = doc.pop("_id")
+        self.data_store[doc_id] = doc
+        return type('Result', (), {'inserted_id': doc_id})()
+    
+    def update_one(self, query, update):
+        doc = self.find_one(query)
+        if doc:
+            doc_id = doc["_id"]
+            if "$push" in update:
+                for field, value in update["$push"].items():
+                    if field not in self.data_store[doc_id]:
+                        self.data_store[doc_id][field] = []
+                    self.data_store[doc_id][field].append(value)
+            if "$pull" in update:
+                for field, value in update["$pull"].items():
+                    if field in self.data_store[doc_id]:
+                        if value in self.data_store[doc_id][field]:
+                            self.data_store[doc_id][field].remove(value)
+            return type('Result', (), {'modified_count': 1})()
+        return type('Result', (), {'modified_count': 0})()
+    
+    def aggregate(self, pipeline):
+        # Simple aggregation for getting unique days
+        if len(pipeline) >= 2 and pipeline[0].get("$unwind") == "$schedule_details.days":
+            unique_days = set()
+            for key, value in self.data_store.items():
+                if "schedule_details" in value and "days" in value["schedule_details"]:
+                    for day in value["schedule_details"]["days"]:
+                        unique_days.add(day)
+            return [{"_id": day} for day in sorted(unique_days)]
+        return []
+    
+    def _matches_query(self, doc, query):
+        for key, condition in query.items():
+            if "." in key:
+                # Handle nested field queries like "schedule_details.days"
+                parts = key.split(".")
+                current = doc
+                for part in parts:
+                    if part in current:
+                        current = current[part]
+                    else:
+                        return False
+                if isinstance(condition, dict) and "$in" in condition:
+                    if not any(item in current for item in condition["$in"]):
+                        return False
+                elif isinstance(condition, dict) and "$gte" in condition:
+                    if current < condition["$gte"]:
+                        return False
+                elif isinstance(condition, dict) and "$lte" in condition:
+                    if current > condition["$lte"]:
+                        return False
+                elif current != condition:
+                    return False
+            else:
+                if key == "_id":
+                    if doc.get("_id") != condition:
+                        return False
+                elif key not in doc or doc[key] != condition:
+                    return False
+        return True
+
+activities_collection = InMemoryCollection(_activities_data)
+teachers_collection = InMemoryCollection(_teachers_data)
 
 # Methods
 def hash_password(password):
@@ -163,6 +248,17 @@ initial_activities = {
         },
         "max_participants": 16,
         "participants": ["william@mergington.edu", "jacob@mergington.edu"]
+    },
+    "Manga Maniacs": {
+        "description": "Dive into epic adventures, discover legendary heroes, and unlock the secrets of Japanese manga storytelling! Join fellow otaku to discuss your favorite series, analyze character development, and explore the art of visual narratives.",
+        "schedule": "Tuesdays, 7:00 PM - 8:00 PM",
+        "schedule_details": {
+            "days": ["Tuesday"],
+            "start_time": "19:00",
+            "end_time": "20:00"
+        },
+        "max_participants": 15,
+        "participants": []
     }
 }
 
