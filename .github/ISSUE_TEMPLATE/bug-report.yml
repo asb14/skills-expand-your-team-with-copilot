@@ -1,0 +1,155 @@
+name: Bug Report
+description: Report a problem or issue with the system
+title: "[BUG] "
+labels: ["bug", "needs-investigation"]
+assignees:
+  - Copilot
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Bug Report
+        
+        Use this form to report problems or issues with the Mergington High School Management System.
+        
+        **Please provide as much detail as possible** - this helps our Copilot coding agent understand and fix the issue quickly.
+
+  - type: dropdown
+    id: bug-area
+    attributes:
+      label: Which part of the system has the issue?
+      description: Select the area where you encountered the problem
+      options:
+        - Student registration for activities
+        - Teacher login/authentication
+        - Activity list display
+        - Activity filtering (by day/time)
+        - Student unregistration
+        - Website loading/performance
+        - Mobile/tablet view
+        - Other (describe below)
+    validations:
+      required: true
+
+  - type: textarea
+    id: bug-description
+    attributes:
+      label: What happened?
+      description: Describe the problem you encountered
+      placeholder: "e.g., When I try to register a student for Chess Club, I get an error message..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: What should have happened?
+      description: Describe what you expected to happen instead
+      placeholder: "e.g., The student should be successfully registered and appear in the participants list..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps-to-reproduce
+    attributes:
+      label: Steps to Reproduce
+      description: List the exact steps to recreate this problem
+      placeholder: |
+        1. Go to the website
+        2. Click on login
+        3. Enter username: mrodriguez, password: art123
+        4. Click on Chess Club "Register Student" button
+        5. Enter student email: test@mergington.edu
+        6. Click Submit
+        7. Error appears...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: frequency
+    attributes:
+      label: How often does this happen?
+      options:
+        - Always (every time I try)
+        - Sometimes (inconsistent)
+        - Rarely (only happened once or twice)
+        - Only under specific conditions
+    validations:
+      required: true
+
+  - type: input
+    id: browser-device
+    attributes:
+      label: Browser and Device
+      description: What browser and device are you using?
+      placeholder: "e.g., Chrome on Windows laptop, Safari on iPad, Firefox on Mac"
+    validations:
+      required: false
+
+  - type: textarea
+    id: error-messages
+    attributes:
+      label: Error Messages
+      description: Copy any error messages you see (exact text)
+      placeholder: "e.g., 'Failed to register student', '401 Unauthorized', '500 Internal Server Error'"
+    validations:
+      required: false
+
+  - type: dropdown
+    id: impact
+    attributes:
+      label: How much does this affect your work?
+      options:
+        - Cannot use the system at all
+        - Major disruption to daily work
+        - Minor inconvenience
+        - Barely noticeable
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: acceptance-criteria
+    attributes:
+      label: Acceptance Criteria for Fix
+      description: The bug will be considered fixed when
+      options:
+        - label: The reported problem no longer occurs
+          required: true
+        - label: The system behaves as expected
+          required: true
+        - label: No new issues are introduced by the fix
+          required: true
+        - label: The fix is tested with the provided reproduction steps
+          required: true
+
+  - type: markdown
+    attributes:
+      value: |
+        ## Implementation Notes for Copilot Agent
+        
+        **Technical Context:**
+        - This is a FastAPI application with HTML/CSS/JavaScript frontend
+        - Backend API endpoints are in `src/backend/routers/`
+        - Frontend code is in `src/static/`
+        - Database operations use in-memory collections (`src/backend/database.py`)
+        - Authentication is handled in `src/backend/routers/auth.py`
+        - Activity operations are in `src/backend/routers/activities.py`
+        
+        **Investigation Steps:**
+        1. Reproduce the issue using the provided steps
+        2. Check browser console for JavaScript errors
+        3. Check FastAPI logs for backend errors
+        4. Review relevant code in the affected area
+        5. Test the fix thoroughly
+        
+        **Common Issues to Check:**
+        - API endpoint errors (check HTTP status codes)
+        - JavaScript errors in browser console
+        - Authentication/session issues
+        - Data validation problems
+        - Race conditions or timing issues
+        
+        **Testing:**
+        - Test the fix with the exact reproduction steps provided
+        - Verify no regression in other functionality
+        - Test in multiple browsers if issue is browser-specific
